@@ -6,10 +6,16 @@ import PaymentPage from "@/components/PaymentPage";
 const Username = ({ params }) => {
   return (
     <>
-    payment Page
-    <PaymentPage username = {params.username} />
+      <PaymentPage username={params.username} />
     </>
   );
 };
 
 export default Username;
+
+
+export async function generateMetadata({params}){
+  return{
+    title:`Support ${params.username} - Get Me A Chai`
+  }
+}

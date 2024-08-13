@@ -2,29 +2,83 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { fetchuser, updateProfile } from "@/actions/useractions";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
-  const { data: session } = useSession();
+  const { data: session, update, status } = useSession();
   const router = useRouter();
   const [form, setForm] = useState({});
 
   useEffect(() => {
+    if (status === "loading") return; // Do nothing while loading
     if (!session) {
       router.push("/login");
+    } else {
+      getData();
     }
-  }, [router, session]);
+  }, [router, session, status]);
+
+  const getData = async () => {
+    if (session && session.user) {
+      try {
+        let u = await fetchuser(session.user.name);
+        setForm(u);
+      } catch (error) {
+        console.error("Failed to fetch user data", error);
+      }
+    }
+  };
 
   const handlechange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = async (e) => {
+    update();
+    if (session && session.user) {
+      try {
+        await updateProfile(e, session.user.name);
+        toast('Profile Updated!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+      } catch (error) {
+        console.error("Failed to update profile", error);
+      }
+    }
+  };
+
   return (
     <>
-      <div className="container mx-auto py-5">
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition="Bounce"
+      />
+      {/* Same as */}
+      <ToastContainer />
+      <div className="container mx-auto py-5 px-6">
         <h1 className="text-center my-5 text-3xl font-bold">
           Welcome to your Dashboard
         </h1>
-        <form className="max-w-2xl mx-auto">
+        <form className="max-w-2xl mx-auto" action={handleSubmit}>
           <div className="my-2">
             <label
               htmlFor="name"
@@ -84,10 +138,10 @@ const Dashboard = () => {
             </label>
             <input
               type="text"
-              value={form.profile ? form.profile : ""}
+              value={form.profilepic ? form.profilepic : ""}
               onChange={handlechange}
-              name="profile"
-              id="profile"
+              name="profilepic"
+              id="profilepic"
               className="block bg-gray-500 w-full p-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder:bg-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focusring-blue-500 rounded-lg text-white text-xs"
             />
           </div>
@@ -142,22 +196,6 @@ const Dashboard = () => {
             />
           </div>
 
-          <div className="my-2">
-            <label
-              htmlFor="razorpay"
-              className="block mb-2 text-sm font-medium text-gray-50xa dark:text-white"
-            >
-              razorpay credentials
-            </label>
-            <input
-              type="text"
-              value={form.razorpay ? form.razorpay : ""}
-              onChange={handlechange}
-              name="razorpay"
-              id="razorpay"
-              className="block bg-gray-500 w-full p-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder:bg-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focusring-blue-500 rounded-lg text-white text-xs"
-            />
-          </div>
           <div className="my-6">
             <button
               type="submit"

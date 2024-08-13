@@ -15,13 +15,13 @@ const Navbar = () => {
   //   );
   // }
   return (
-    <nav className="bg-gray-900 text-white flex justify-between px-4 h-16 items-center">
+    <nav className="bg-gray-900 text-white flex justify-between px-4 md:h-16 flex-col md:flex-row items-center">
       <Link
         className="logo font-bold text-lg flex justify-center items-center"
         href={"/"}
       >
         <img src="/tea.png" width={44} alt="" />
-        <span>Get Me a Chai!</span>
+        <span className="text-xl md:text-base my-3 md:my-0">Get Me a Chai!</span>
       </Link>
 
       {/* <ul className="flex justify-around gap-4">
@@ -31,7 +31,7 @@ const Navbar = () => {
         <li>Sign Up</li>p[]
         <li>Login</li>
       </ul> */}
-      <div className="relative">
+      <div className="relative flex flex-col md:block gap-4">
         {session && (
           <>
             <button
@@ -73,6 +73,14 @@ const Navbar = () => {
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"
                 aria-labelledby="dropdownDefaultButton"
               >
+                {/* <li>
+                  <Link
+                    href={"/dashboard"}
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Dashboard
+                  </Link>
+                </li> */}
                 <li>
                   <Link
                     href="/dashboard"

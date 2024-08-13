@@ -7,10 +7,8 @@ const login = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
-  // if (session) {
-  //   router.push("/dashboard");
-  // }
   useEffect(() => {
+    document.title = "Login - Get Me A chai"
     if (session) {
       router.push("/dashboard");
     }
@@ -19,7 +17,7 @@ const login = () => {
   return (
     <div className=" py-14 mx-auto containerz">
       <h1 className="text-center font-bold text-3xl text-white">
-        Login to Get your fans to support you
+        Login to Get Started
       </h1>
       <div className="flex flex-col  items-center gap-2 min-h-screen p-10">
         <button className="flex items-center border w-64 bg-slate-50 text-black border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
@@ -252,3 +250,4 @@ const login = () => {
 };
 
 export default login;
+
